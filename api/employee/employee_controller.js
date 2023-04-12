@@ -1,4 +1,4 @@
-const { countEmployees,getEmployees,addEmployee,getEmployeeByEmpId,updateEmployee,deleteEmployee } = require("./employee_model");
+const { countEmployees,getEmployees,addEmployee,getEmployeeByEmpId,updateEmployee,deleteEmployee,getAllEmployeeBrithday } = require("./employee_model");
 const { hashSync, genSaltSync } = require("bcrypt");
 module.exports = {
     createEmployee: (req, res) => {
@@ -120,16 +120,16 @@ module.exports = {
     },
     getEmployeeBrithday:(req, res) =>{
       try {
-        User.dashboardBirthdayList((error, data) => {
-            console.log(data);
+        getAllEmployeeBrithday((error, data) => {
+           // console.log(data);
                 res.status(200).json({
                     status: true,
-                    msg: 'User Birthday Data fetch successfully',
+                    msg: 'Employee Upcomming Birthday Data fetch successfully',
                     result: data
                 });
             });
       } catch (error) {
-          res.status(201).json({ status: false, msg: error })
+          res.status(201).json({ status: false, msg: 'Something Went Wrong' })
       }
     },
     updateEmployees: (req, res) => {

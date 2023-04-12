@@ -82,11 +82,8 @@ module.exports = {
               }
           })
     },
-    getEmployeeBrithday:(callBack) =>{
-      dbConn.query('select U.id,concat(UD.fname," ",UD.mname," ",UD.lname) as name,UD.it_status,U.email,U.dept_id,U.role_id,U.user_type,U.link_status as link,UD.birthday,UD.profile_img,U.status,D.name as dept_name,R.name as role_name from tm_user as U ' +
-        'join tm_user_detail as UD on UD.user_id = U.id '+
-        'left join tm_department as D on D.id = U.dept_id ' +
-        'left join tm_role as R on R.id = U.role_id WHERE MONTH(birthday) = MONTH(NOW()) AND DAY(birthday) = DAY(NOW())', (err, res) => {
+    getAllEmployeeBrithday:(callBack) =>{
+      dbConn.query('SELECT user_id,concat(fname," ",mname," ",lname) as name, birthday FROM tm_user_detail WHERE DATE(CONCAT(YEAR(CURDATE()), RIGHT(birthday, 6))) BETWEEN  DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND  DATE_ADD(CURDATE(), INTERVAL 5 DAY) ORDER BY birthday ', (err, res) => {
             if (err) {
                 console.log(err)
                 callBack(err);
