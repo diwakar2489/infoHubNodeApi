@@ -82,17 +82,17 @@ module.exports = {
               }
           })
     },
-    getEmployeeBrithday:() =>{
+    getEmployeeBrithday:(callBack) =>{
       dbConn.query('select U.id,concat(UD.fname," ",UD.mname," ",UD.lname) as name,UD.it_status,U.email,U.dept_id,U.role_id,U.user_type,U.link_status as link,UD.birthday,UD.profile_img,U.status,D.name as dept_name,R.name as role_name from tm_user as U ' +
         'join tm_user_detail as UD on UD.user_id = U.id '+
         'left join tm_department as D on D.id = U.dept_id ' +
         'left join tm_role as R on R.id = U.role_id WHERE MONTH(birthday) = MONTH(NOW()) AND DAY(birthday) = DAY(NOW())', (err, res) => {
             if (err) {
                 console.log(err)
-                result(err);
+                callBack(err);
             } else {
                 //console.log(res);return false;
-                result(null, res);
+                callBack(null, res);
             }
         })
     },
