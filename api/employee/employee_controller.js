@@ -119,7 +119,18 @@ module.exports = {
       }
     },
     getEmployeeBrithday:(req, res) =>{
-      
+      try {
+        User.dashboardBirthdayList((error, data) => {
+            console.log(data);
+                res.status(200).json({
+                    status: true,
+                    msg: 'User Birthday Data fetch successfully',
+                    result: data
+                });
+            });
+      } catch (error) {
+          res.status(201).json({ status: false, msg: error })
+      }
     },
     updateEmployees: (req, res) => {
       const body = req.body;
