@@ -83,7 +83,13 @@ module.exports = {
           })
     },
     getAllEmployeeBrithday:(callBack) =>{
-      dbConn.query('SELECT user_id,concat(fname," ",mname," ",lname) as name, birthday FROM tm_user_detail WHERE DATE(CONCAT(YEAR(CURDATE()), RIGHT(birthday, 6))) BETWEEN  DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND  DATE_ADD(CURDATE(), INTERVAL 5 DAY) ORDER BY birthday ', (err, res) => {
+     // 'DATE(CONCAT(YEAR(CURDATE()), RIGHT(birthday, 6))) BETWEEN  DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND  DATE_ADD(CURDATE(), INTERVAL 5 DAY)';
+
+      dbConn.query('SELECT UD.user_id,concat(UD.fname," ",UD.mname," ",UD.lname) as name, UD.birthday,UD.profile_img as user_image,R.name as role_name,D.name as dept_name FROM tm_user as U '+
+      'join tm_user_detail as UD on UD.id = U.id '+
+      'join tm_department as D on D.id = U.dept_id '+
+      'join tm_role as R on R.id = U.role_id '+
+      'WHERE MONTH(UD.birthday) = MONTH(NOW()) AND DAY(UD.birthday) = DAY(NOW()) ', (err, res) => {
             if (err) {
                 console.log(err)
                 callBack(err);

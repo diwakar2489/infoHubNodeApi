@@ -22,13 +22,14 @@ module.exports = {
                     console.log(results)
                     const userId = results.id;
                     const name = results.name;
+                    const img = results.user_img
                     const email = results.email;
                     const role_id = results.role_id;
                     const dept_id = results.dept_id;
                     const DepartmentName = results.dept_name;
                     const RoleName = results.role_name;
                     const password = results.password = undefined;
-                  const jsontoken = sign({ userId,name,email,role_id,dept_id,password,DepartmentName,RoleName }, process.env.JWT_KEY, {
+                  const jsontoken = sign({ userId,name,img,email,role_id,dept_id,password,DepartmentName,RoleName }, process.env.JWT_KEY, {
                     expiresIn: "1h"
                   });
                   return res.json({
@@ -54,11 +55,11 @@ module.exports = {
     authGoogleRecaptchRouter: async (req, res) =>{
         try{
             const token = req.body.token;
-            const secret = process.env.APP_SECRET_KEY;
+            const secret = req.body.secret;
             // replace APP_SECRET_KEY with your reCAPTCHA secret key
             let response = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`);
             //console.log(response);return false;
-            if(response.status === true){
+            if(response){
                 return res.status(200).json({
                     status:true,
                     msg: "Success!! Hurray!! you have submitted the form",
