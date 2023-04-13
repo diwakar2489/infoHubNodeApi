@@ -106,5 +106,29 @@ module.exports = {
                 msg: "Something Went Wrong"
             });
         }
+    },
+    getTodayAttendanceMark:(req,res)=>{
+        try {
+            const { EmpID, AttendanceDate } = req.body;
+            getTodayEmpAttendanceById(EmpID, AttendanceDate, (err, results) => {
+                if (err) {
+                    //console.log(err);
+                    return res.status(500).json({
+                        status: false,
+                        msg: "Database connection errror"
+                    });
+                }
+                return res.status(200).json({
+                    status: true,
+                    msg: "Your Today Attendance Mark list successfully",
+                    data: results
+                });
+            })
+        }catch(error){
+            return res.status(201).json({
+                status: false,
+                msg: "Something Went Wrong"
+            });
+        }
     }
 }

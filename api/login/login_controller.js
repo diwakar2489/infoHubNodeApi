@@ -4,6 +4,25 @@ const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const axios = require('axios');
 var nodemailer = require('nodemailer');
+// const { setEmailConfigration } = require("../../middleware/mail/mail_configuration");
+// console.log(setEmailConfigration);return false;
+var transporter = nodemailer.createTransport({
+  pool: true,
+  host: "smtp.office365.com",
+  port: 587,
+  secure: false,
+  // service: process.env.MAILER_SERVER,
+  // secureConnection: false,
+  auth: {
+    user: process.env.MAILER_USER_EMAIL,
+    pass: process.env.MAILER_USER_PASS
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
+    ciphers:'SSLv3'
+  },
+});
 
 module.exports = {
 
@@ -93,40 +112,35 @@ module.exports = {
             code: otpcode,
             expiresIn: new Date().getTime() + 300 * 1000
           }
-          var transporter = nodemailer.createTransport({
-            service: process.env.MAILER_SERVER,
-            auth: {
-              user: process.env.MAILER_USER_EMAIL,
-              pass: process.env.MAILER_USER_PASS
-            }
-          });
+         
           var mailOptions = {
-            from: 'diwakarmahidon3@gmail.com',
+            from: process.env.EMAIL_FROM,
             to: 'diwakar.pandey@qbslearning.com',
             subject: 'verify otp',
             text: `Your otp id ${otpcode}`
           };
-
+        
           transporter.sendMail(mailOptions, function (error, info) {
+            console.log(info)
             if (error) {
               console.log(error);
             } else {
               console.log('Email sent: ' + info.response);
-            }
-          });
-          createUserOtp(OtpData, (error, UserInfo) => {
-            if (error) {
-              console.log(error);
-            } else {
-              res.status(200).json({
-                status: true,
-                msg: 'please check your email id',
-                data: UserInfo
+              createUserOtp(OtpData, (error, UserInfo) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  res.status(200).json({
+                    status: true,
+                    msg: 'Email sent check your email id' + info.response,
+                    data: UserInfo
+                  });
+                }
+    
               });
             }
-
           });
-
+          
         } else {
           res.status(200).json({ status: false, msg: 'email id is not vaild' });
         }
