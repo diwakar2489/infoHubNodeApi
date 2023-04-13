@@ -3,8 +3,8 @@ const express = require("express");
 const cors = require('cors');
 const app = express();
 
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 
 const employeeRouter = require("./api/employee/employee_router");
@@ -15,44 +15,55 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
-const options = {
-    definition: {
-      openapi: "3.0.0",
+const swaggerOptions = {
+    swaggerDefinition: {
       info: {
-        title: "InfoHub Node API with Swagger",
-        version: "0.1.0",
-        description:
-          "This is a simple CRUD API application made with Node Express and documented with Swagger",
-        // license: {
-        //   name: "MIT",
-        //   url: "https://spdx.org/licenses/MIT.html",
-        // },
+        version: "1.0.0",
+        title: "InfoHub HR API",
+        description: "An API that allows users to obtain existing information of employees or post info of new employees",
         contact: {
-          name: "InfoHub",
-          url: "https://infohub.qbslearning.com",
-          email: "info@hub.com",
+          name: "Diwakar Developer",
+          url:"https://www.qbslearning.com/",
+          email:"diwakar.pandey@qbslearning.com"
         },
-      },
-      servers: [
-        {
-          url: "http://localhost:2489",
-        },
-      ],
+        servers: ["http://localhost:2489"]
+      }
     },
-    apis: ["./api/*.js"],
+    // ['.routes/*.js']
+    apis: ["app.js"]
   };
   
-  const specs = swaggerJsdoc(options);
-  app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(specs,{ 
-        explorer: true ,
-        customCssUrl:"https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css",
-        })
-        
-  );
+  const swaggerDocs = swaggerJsDoc(swaggerOptions);
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   
+  // Employee Routes
+  /**
+   * @swagger
+   * /api/employee:
+   *  get:
+   *    description: Get to request all Employee list
+   *    responses:
+   *      '200':
+   *        description: A successful response
+   */
+  /**
+   * @swagger
+   * /api/employee:
+   *  post:
+   *    description: Add to request for employee registration
+   *    responses:
+   *      '200':
+   *        description: A successful response
+   */
+  /**
+   * @swagger
+   * /api/employee:{id}:
+   *  get:
+   *    description: Get to request for Single employee Details
+   *    responses:
+   *      '200':
+   *        description: A successful response
+   */
  
 
 app.use("/api/employee", employeeRouter);

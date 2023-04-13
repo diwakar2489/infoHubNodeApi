@@ -22,7 +22,7 @@ module.exports = {
     },
     getTodayEmpAttendanceById: (id,TodayDate, callBack) => {
         
-         dbConn.query('select  AT.id,COUNT(AT.user_id) AS `Total` ,AT.user_id,AT.start_time,AT.att_date,AT.status from tm_user_attendance as AT ' +
+         dbConn.query('select  AT.id,COUNT(AT.user_id) AS `Total` ,AT.user_id,AT.start_time,AT.end_time,AT.att_date,AT.status from tm_user_attendance as AT ' +
         ' WHERE AT.user_id = "'+id+'" and att_date = "'+TodayDate+'"', (error, results ,fields) => {
             
               if (error) {

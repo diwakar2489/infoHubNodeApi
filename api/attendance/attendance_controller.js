@@ -111,6 +111,7 @@ module.exports = {
         try {
             const { EmpID, AttendanceDate } = req.body;
             getTodayEmpAttendanceById(EmpID, AttendanceDate, (err, results) => {
+                //console.log(results);return false;
                 if (err) {
                     //console.log(err);
                     return res.status(500).json({
@@ -118,11 +119,18 @@ module.exports = {
                         msg: "Database connection errror"
                     });
                 }
-                return res.status(200).json({
-                    status: true,
-                    msg: "Your Today Attendance Mark list successfully",
-                    data: results
-                });
+                if(results.Total > 0){
+                    return res.status(200).json({
+                        status: true,
+                        msg: "Today Attendance Mark successfully",
+                        data: results
+                    });
+                }else{
+                    return res.status(201).json({
+                        status: false,
+                        msg: "Today Attendance Mark Empty, please mark your Attendance"
+                    });
+                }
             })
         }catch(error){
             return res.status(201).json({
