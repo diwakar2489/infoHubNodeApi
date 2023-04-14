@@ -1,4 +1,4 @@
-const { TimeInMarkYourAttendance, TimeOutMarkYourAttendance, getTodayEmpAttendanceById } = require("./attendance_model");
+const { TimeInMarkYourAttendance, TimeOutMarkYourAttendance, getTodayEmpAttendanceById,getAllEmpAttendanceById } = require("./attendance_model");
 module.exports = {
     attendanceStartTime: (req, res) => {
         try {
@@ -88,7 +88,7 @@ module.exports = {
                             });
                         }
                         return res.status(200).json({
-                            status: false,
+                            status: true,
                             msg: "Your Attendance Time out Mark successfully",
                             data: results
                         });
@@ -131,6 +131,35 @@ module.exports = {
                         msg: "Today Attendance Mark Empty, please mark your Attendance"
                     });
                 }
+            })
+        }catch(error){
+            return res.status(201).json({
+                status: false,
+                msg: "Something Went Wrong"
+            });
+        }
+    },
+    getMyAttendanceList:(req,res)=>{
+       
+        try{
+            const { EmpID,FindMonth } = req.body;
+            var date = new Date(FindMonth);
+            var month = date.getMonth() + 1;
+            getAllEmpAttendanceById(EmpID,month, (err, results) => {
+                //console.log(results);return false;
+                if (err) {
+                    //console.log(err);
+                    return res.status(500).json({
+                        status: false,
+                        msg: "Database connection errror"
+                    });
+                }
+                return res.status(200).json({
+                    status: true,
+                    msg: "All Attendance mark in month successfully",
+                    data: results
+                });
+                
             })
         }catch(error){
             return res.status(201).json({

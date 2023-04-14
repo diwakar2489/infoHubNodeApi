@@ -34,6 +34,22 @@ module.exports = {
           })
         
       },
+      getAllEmpAttendanceById:(id,SelectedMonth, callBack) =>{
+        const date = new Date();
+        const month = date.getMonth() + 1;
+        const checkdate = SelectedMonth ? SelectedMonth :month;
+        console.log(date)
+       const db = dbConn.query('select  AT.id,AT.user_id,AT.start_time,AT.end_time,AT.att_date,AT.status from tm_user_attendance as AT ' +
+        ' WHERE MONTH(date(att_date))= '+checkdate+' and AT.user_id = "'+id+'" ', (error, results ,fields) => {
+            console.log(db.sql);
+              if (error) {
+                  callBack(error);
+              } else {
+                //console.log(run.sql);return false;
+                  callBack(null, results);
+              }
+          })
+      },
       TimeOutMarkYourAttendance: (ID,attData, callBack) => {
 
         var command = 'update tm_user_attendance set end_time =?,updated_on=?,updated_by = ? where id= ?'
