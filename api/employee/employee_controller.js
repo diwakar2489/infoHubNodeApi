@@ -6,7 +6,7 @@ module.exports = {
       //console.log(req.body);
         const { usertype,empcode, comp, dept, role, reportingMNG, joiningdate, fname, mname, lname, email, status, gender, contact, created_on, created_by } = req.body;
        // const body = req.body;
-        const password = "Hive123";
+        const password = "hive1234";
         const salt = genSaltSync(10);
         const hashPassword = hashSync(password, salt);
           var firstRequestData = {
